@@ -121,3 +121,36 @@ cor.test(blood.glucose, short.velocity)
 
 #spearman correlation
 cor.test(blood.glucose,short.velocity,method="spearman")
+
+#Research Example
+library("ggplot2")
+
+#Create data_frame and order levels
+cwd = "/Users/thomasvanasse/Google Drive/RESEARCH/PTSD_RS_ICA/Graphs/"
+
+#get self-report measures from csv
+self_report = read.csv(file=sprintf("%s/subject_scores.csv", cwd))
+self_report_df = data.frame(self_report)
+#create factors based on subject group
+self_report_df$Group <- factor(self_report_df$Group, levels=c('cc','tec','ptsd'))
+
+#GET z-score data
+SDR_names = read.csv(file=sprintf("%s/SDR_names.csv", cwd), header = TRUE)
+i <- 14
+mydata = read.table(sprintf("%s/SDR_mean_z/MEANZ_OUTPUT_SDR%d.txt", cwd, i))
+  
+#add the mean z-score to data
+self_report_df$meanz <- mydata[1:105,]
+    
+plot <- ggplot(self_report_df, aes(x=PCL_V1, y=meanz, color=Group))
+    
+plot + geom_point(aes(shape=Group, color=Group)) + xlab("PCL scores") + ylab("Mean z-score") +
+      ggtitle(sprintf("%s, r=%g (p=%.2e)", SDR_names$SDR[i], round(cor(self_report_df$meanz,self_report_df$PCL_V1),2), cor.test(self_report_df$meanz,self_report_df$PCL_V1)$p.value)) + 
+      theme(plot.title= element_text(hjust = 0.5)) + 
+      theme_gray(base_size = 18) + guides(fill=FALSE) +
+      theme(axis.text.x = element_text(colour="black"), axis.text.y = element_text(colour="black")) + 
+      theme(axis.text=element_text(size=18), axis.title=element_text(size=18,face="bold"), plot.title = element_text(size = 20, face = "bold"))
+
+ggsave(sprintf("%s/ptsd_tec_cc_graphs/PCL_correlation_%s.png",cwd,SDR_names$SDR[i]), width = 5, height = 5, dpi = 300)
+  
+
