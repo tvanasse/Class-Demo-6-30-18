@@ -14,16 +14,18 @@ thuesen
 #scatter plot
 plot(blood.glucose,short.velocity)
 
+#creates "model object"
+lm.velo <- lm(short.velocity~blood.glucose)
+
 #Plot Line, meaning (a, b)-line, draws lines based on the 
 #intercept and slope, a and b, respectively.
 abline(lm.velo)
 
-#creates "model object"
-lm(short.velocity~blood.glucose)
-
 #Extractor function
 summary(lm(short.velocity~blood.glucose))
+#STOP
 
+#START
 #Exclude missing data point so it doesn't cause us problems!
 options(na.action=na.exclude)
 lm.velo<-lm(short.velocity~blood.glucose)
@@ -36,7 +38,7 @@ segments(blood.glucose,fitted(lm.velo),
 plot(lm.velo) 
 
 #Let's look at a different dataset, lh, in the R datasets package
-#A regular time series giving the luteinizing hormone in 
+#A regular time series giving the luteinizing hormone (LH) in 
 #blood samples at 10 mins intervals from a human female, 48 samples.
 lh
 plot(lh)
@@ -47,12 +49,10 @@ acf(lh)
 hist(resid(lm.velo))
 qqnorm(resid(lm.velo))
 
-#Checking Homoscedacity function (plot 3)
+#Checking Homoscedacity function and CD (plot 3 & 4)
 plot(lm.velo)
 
-#Checking Cook's Distance (plot 4)
-plot(lm.velo)
-
+#STOP
 
 #data frame of x-values, which will be used to predict y-values
 pred.frame<-data.frame(blood.glucose=4:20)
@@ -80,7 +80,7 @@ y<-2+3*x+rnorm(100,sd=2)
 Deming(x,y)
 ?Deming
 
-#Ration of variances is 2, i.e. residual variance in x is 
+#Ratio of variances is 2, i.e. residual variance in x is 
 #two times larger than residual variance in y
 #vr - variance ratio
 
@@ -149,7 +149,7 @@ plot + geom_point(aes(shape=Group, color=Group)) + xlab("PCL scores") + ylab("Me
       theme(plot.title= element_text(hjust = 0.5)) + 
       theme_gray(base_size = 18) + guides(fill=FALSE) +
       theme(axis.text.x = element_text(colour="black"), axis.text.y = element_text(colour="black")) + 
-      theme(axis.text=element_text(size=18), axis.title=element_text(size=18,face="bold"), plot.title = element_text(size = 20, face = "bold"))
+      theme(axis.text=element_text(size=18), axis.title=element_text(size=15,face="bold"), plot.title = element_text(size = 15, face = "bold"))
 
 ggsave(sprintf("%s/ptsd_tec_cc_graphs/PCL_correlation_%s.png",cwd,SDR_names$SDR[i]), width = 5, height = 5, dpi = 300)
   
